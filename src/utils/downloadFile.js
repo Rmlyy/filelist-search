@@ -16,16 +16,17 @@ async function downloadFile(url) {
     }
 
     const savePath = path.join(path.resolve(process.env.DOWNLOAD_DIR), fileName)
+    const fileWriter = fs.createWriteStream(savePath)
 
-    res.data.pipe(fs.createWriteStream(savePath))
+    res.data.pipe(fileWriter)
 
     return new Promise((resolve, reject) => {
-      res.data.on('end', () => {
+      fileWriter.on('finish', () => {
         console.log(`[*] File successfully downloaded to ${savePath}`)
         resolve()
       })
 
-      res.data.on('error', (error) => {
+      fileWriter.on('error', (error) => {
         reject(error)
       })
     })
