@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-async function search(query) {
-  const reqURL = `https://filelist.io/api.php?username=${process.env.USERNAME}&passkey=${process.env.PASSKEY}&action=search-torrents&query=${query}&type=name`
+async function search(query, category) {
+  if (category === 0) category = ''
+
+  const reqURL = `https://filelist.io/api.php?username=${process.env.USERNAME}&passkey=${process.env.PASSKEY}&action=search-torrents&category=${category}&query=${query}&type=name`
 
   try {
     const res = (await axios.get(reqURL)).data

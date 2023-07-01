@@ -4,17 +4,20 @@ import promptSearch from './utils/promptSearch.js'
 import promptDownload from './utils/promptDownload.js'
 import downloadChoices from './utils/downloadChoices.js'
 import downloadFile from './utils/downloadFile.js'
+import { promptCategory, categories } from './utils/promptCategory.js'
 
 while (true) {
+  const getCategory = await promptCategory()
+  const searchCategory = categories[getCategory]
   const searchQuery = await promptSearch()
-  const searchRes = await search(searchQuery)
+  const searchRes = await search(searchQuery, searchCategory)
 
   if (!searchRes.length) {
     console.log('[!] Your search returned 0 results. Please try again.')
     continue
   }
 
-  console.log(`[*] Found ${searchRes.length} result(s).`)
+  console.log(`[*] Found ${searchRes.length} result(s) in category ${getCategory} (ID: ${searchCategory}).`)
 
   const promptChoices = await downloadChoices(searchRes)
   const chosenItem = await promptDownload(promptChoices)
